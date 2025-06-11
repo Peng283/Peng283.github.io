@@ -17,6 +17,134 @@
         <button class="btn btn-primary" onclick="analyzeText()">Analyze</button>
       </div>
   
-      
-  </body>
-  </html>
+      <div id="results"></div>
+  
+      <script>
+        const emojiData = {
+          '☃️': 'Unicode 1.1'
+        };
+
+        // Repeated Emoji Function
+        // 更準確的 Emoji 偵測
+        function isEmoji(char) {
+          return /\p{Extended_Pictographic}/u.test(char);
+        }
+
+        // 使用 `Intl.Segmenter` 確保未來適應性強
+        function findRepeatedEmojiOnly(text) {
+          const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
+          const chars = Array.from(segmenter.segment(text), s => s.segment); // 使用 Unicode 片段分割
+
+          let results = [];
+          let count = 1;
+          let prev = chars[0];
+
+          for (let i = 1; i < chars.length; i++) {
+            if (prev === chars[i] && isEmoji(chars[i])) {
+              count++;
+            } else {
+              if (count > 1 && isEmoji(prev)) {
+                results.push({ emoji: prev, count });
+              }
+              count = 1;
+            }
+            prev = chars[i];
+          }
+
+          if (count > 1 && isEmoji(prev)) {
+            results.push({ emoji: prev, count });
+          }
+
+          return results;
+        }
+
+        function analyzeText() {
+          const text = document.getElementById("userInput").value;
+          const resultsDiv = document.getElementById("results");
+          resultsDiv.innerHTML = '';
+
+          // Screen Reader Output
+          const readerCard = document.createElement("div");
+          readerCard.className = "card result-card p-3";
+          const readerText = [...text].map(c => `<span>${c}</span>`).join('');
+          readerCard.innerHTML = `
+            <h5>🔊 Screen Reader Output</h5>
+            <p class="text-muted">Listen to how it sounds with a screen reader.</p>
+            <div class="screen-reader-text">${readerText}</div>
+            <button class="btn btn-outline-secondary mt-2" onclick="playText('${text.replace(/'/g, "\\'")}')">▶ Play</button>
+            
+          `;
+          resultsDiv.appendChild(readerCard);
+    
+          // Repeated Emoji
+          const repeatedList = findRepeatedEmojiOnly(text);
+          const repeatedCard = document.createElement("div");
+          repeatedCard.className = "card result-card p-3";
+          let repeatedStatus = '✅ No excessive repetition detected';
+          let repeatedClass = 'status-success';
+          if (repeatedList.length > 0) {
+            repeatedStatus = '❌ Found repeated emoji: ' + repeatedList.map(e => `${e.emoji} (${e.count} times)`).join(', ');
+            repeatedClass = 'status-error';
+            repeatedCard.classList.add('highlight-error');
+          }
+          repeatedCard.innerHTML = `
+            <h5>🔁 Repeated Emoji</h5>
+            <p class="text-muted">Avoid using continuous and repeated emoji.</p>
+            <p class="${repeatedClass}">${repeatedStatus}</p>
+          `;
+          resultsDiv.appendChild(repeatedCard);
+    
+          // Position of Emoji
+          const startsWithEmoji = /^[\u231A-\uD83E\uDDFF]/.test(text);
+          const positionCard = document.createElement("div");
+          positionCard.className = "card result-card p-3";
+          if (startsWithEmoji) positionCard.classList.add('highlight-error');
+          positionCard.innerHTML = `
+            <h5>📍 Position of Emoji</h5>
+            <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
+            <p class="${startsWithEmoji ? 'status-error' : 'status-success'}">
+              ${startsWithEmoji ? '❌ Emoji found at the beginning of the sentence' : '✅ Emoji is well positioned'}
+            </p>
+          `;
+          resultsDiv.appendChild(positionCard);
+    
+          // Supported Emoji
+          const supportedCard = document.createElement("div");
+          supportedCard.className = "card result-card p-3";
+          supportedCard.innerHTML = `
+            <h5>📱 Supported Emoji</h5>
+            <p class="text-muted">Check if emoji is supported across platforms.</p>
+          `;
+          let unsupported = false;
+          for (let char of text) {
+            if (emojiData[char]) {
+              supportedCard.innerHTML += `<p>✅ ${char} Added in ${emojiData[char]}</p>`;
+            } else if (/[\u231A-\uD83E\uDDFF]/.test(char)) {
+              supportedCard.innerHTML += `<p class="status-warning">⚠️ ${char} Emoji may not be supported everywhere</p>`;
+              unsupported = true;
+            }
+          }
+          if (unsupported) supportedCard.classList.add('highlight-error');
+          resultsDiv.appendChild(supportedCard);
+        }
+    
+        // Screen Reader Output Fuction
+        // Web Speech API 
+        function playText(text) {
+          const utterance = new SpeechSynthesisUtterance();
+          const spans = document.querySelectorAll(".screen-reader-text span");
+          let index = 0;
+          utterance.text = text;
+          utterance.onboundary = (event) => {
+            if (event.name === 'word') {
+              spans.forEach(span => span.classList.remove('active'));
+              if (spans[index]) spans[index].classList.add('active');
+              index++;
+            }
+          };
+          speechSynthesis.cancel();
+          speechSynthesis.speak(utterance);
+        }
+      </script>
+    </body>
+    </html>
