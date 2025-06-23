@@ -21,6 +21,7 @@
   </div>
 
   <script>
+    // Repeated Emoji Function
     // 更準確的 Emoji 偵測
     function isEmoji(char) {
       return /\p{Extended_Pictographic}/u.test(char);
@@ -54,17 +55,28 @@
       return results;
     }
 
+    // Supported Emoji Function
     // 載入 emoji 支援資料（Emojibase CDN）
     async function loadEmojiSupportData() {
       const response = await fetch("https://cdn.jsdelivr.net/npm/emojibase-data/en/data.json");
       return await response.json();
     }
 
-    // 從資料中找出單一 emoji 的資訊
+    // 查詢 emoji 資料
     function findEmojiInfo(emoji, dataset) {
       return dataset.find(entry => entry.emoji === emoji);
     }
 
+    // 匹配版本對應支援說明
+    function getSupportNote(version) {
+      const v = parseFloat(version);
+      if (v <= 6.0) return "✅ Supported on 90%+ devices";
+      if (v <= 12.0) return "✅ Supported on most modern devices";
+      if (v <= 14.0) return "⚠️ May not appear on older systems";
+      return "⚠️ Limited support on older platforms";
+    }
+
+    // 主分析函式
     function analyzeText() {
       const text = document.getElementById("userInput").value;
       const resultsDiv = document.getElementById("results");
@@ -121,6 +133,7 @@
         <h5>📱 Supported Emoji</h5>
         <p class="text-muted">Check platform support and Unicode version.</p>
       `;
+
       const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
       const emojiList = [...new Set(Array.from(segmenter.segment(text), s => s.segment).filter(isEmoji))];
 
@@ -128,16 +141,26 @@
         emojiList.forEach(char => {
           const info = findEmojiInfo(char, dataset);
           if (info) {
+            const supportText = getSupportNote(info.version);
             supportedCard.innerHTML += `
-              <div class="mb-2">
-                <strong>${char}</strong> – ${info.label}<br>
-                Unicode: ${info.version}<br>
-                Shortcode: :${info.shortcodes?.[0] || 'N/A'}:
-              </div>`;
+              <div class="border rounded p-2 mb-2">
+                <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
+                <div class="text-muted">📅 Unicode ${info.version}</div>
+                <div class="text-success">${supportText}</div>
+              </div>
+            `;
           } else {
-            supportedCard.innerHTML += `<p class="status-warning">⚠️ ${char} – Not found in database</p>`;
+            supportedCard.innerHTML += `
+              <div class="border rounded p-2 mb-2">
+                <div class="fw-bold fs-5 mb-1">${char}</div>
+                <div class="text-warning">⚠️ Not found in database</div>
+              </div>
+            `;
           }
         });
+        resultsDiv.appendChild(supportedCard);
+      }).catch(() => {
+        supportedCard.innerHTML += `<p class="text-danger">❌ Failed to load emoji data.</p>`;
         resultsDiv.appendChild(supportedCard);
       });
     }
