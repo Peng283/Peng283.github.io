@@ -1,173 +1,268 @@
 /* 背景與全站字體：柔和背景＋高可讀性字型 */ 
 body {
-  background-color: #f8f9f8;
-  font-family: 'Inter', sans-serif;
-  color: #2c2c2c;
-  padding: 3rem;
-  font-size: 1.05rem;
-  line-height: 1.7;
+    background-color: #f8f9f8;
+    font-family: 'Inter', sans-serif;
+    color: #2c2c2c;
+    padding: 3rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
 }
 
 /* 標題：雜誌風封面感 */
 h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 3rem;
-  font-weight: 700;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #1a1a1a;
-  margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
 }
 h1::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 3px;
-  background-color: #aaa;
-  margin: 0.75rem auto 0;
-  opacity: 0.3;
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: #aaa;
+    margin: 0.75rem auto 0;
+    opacity: 0.3;
 }
 
 /* 副標：溫和無壓力的介紹段落 */
 p.text-muted {
-  text-align: left;
-  color: #5c636a;
-  font-weight: 400;
-  font-size: 1.05rem;
+    text-align: left;
+    color: #5c636a;
+    font-weight: 400;
+    font-size: 1.05rem;
 }
 
 /* 卡片區塊 */
 .result-card {
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
-  margin-top: 2rem;
-  padding: 2rem;
-  border: 1px solid #e0e0e0;
-  transition: transform 0.3s ease;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+    padding: 2rem;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease;
 }
 .result-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
 }
 
 /* 狀態色：色盲友善配色 */
 .status-success {
-  color: #1e9e75;
-  font-weight: 600;
+    color: #1e9e75;
+    font-weight: 600;
 }
 .status-warning {
-  color: #cc7722;
-  font-weight: 600;
+    color: #cc7722;
+    font-weight: 600;
 }
 .status-error {
-  color: #b23c3c;
-  font-weight: 600;
+    color: #b23c3c;
+    font-weight: 600;
 }
 .highlight-error {
-  border: 2px solid #b23c3c;
-  background-color: #fff6f6;
-  transform: scale(1.01);
+    border: 2px solid #b23c3c;
+    background-color: #fff6f6;
+    transform: scale(1.01);
 }
 
 /* 語音高亮 */
 .screen-reader-text span.active {
-  background-color: #f6f08e;
-  border-radius: 3px;
-  padding: 0 3px;
+    background-color: #f6f08e;
+    border-radius: 3px;
+    padding: 0 3px;
 }
 
 /* 輸入框與按鈕 */
 .form-control {
-  border-radius: 30px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
 }
 .form-control:focus {
-  border-color: #999;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    border-color: #999;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 .input-group {
-  gap: 0.5rem;
+    gap: 0.5rem;
 }
 .btn-primary {
-  background-color: #1a1a1a;
-  border-color: #1a1a1a;
-  border-radius: 40px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 0.6rem 1.4rem;
-  font-size: 0.95rem;
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
+    border-radius: 40px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    font-size: 0.95rem;
 }
 .btn-primary:hover {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  border: 2px solid #1a1a1a;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border: 2px solid #1a1a1a;
 }
 
 /* Emoji 背景圖層，鋪滿且具有透明度 */
 .emoji-bg::before {
-  content: '😀 😇 🫶 😂 🥹 🤔 ❤️ 🎉 🙈 👀 🙌 🧠 😎 🛟 🔊 👋 😢 🤖 🧑‍🦯 🎯';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.06;
-  font-size: 8rem;
-  line-height: 1.4;
-  letter-spacing: 1rem;
-  white-space: pre-wrap;
-  text-align: center;
-  color: #000;
-  pointer-events: none;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 2rem;
+    content: '😀 😇 🫶 😂 🥹 🤔 ❤️ 🎉 🙈 👀 🙌 🧠 😎 🛟 🔊 👋 😢 🤖 🧑‍🦯 🎯';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.06;
+    font-size: 8rem;
+    line-height: 1.4;
+    letter-spacing: 1rem;
+    white-space: pre-wrap;
+    text-align: center;
+    color: #000;
+    pointer-events: none;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2rem;
 }
 
 /* 響應式調整：在手機上縮小 emoji 字體避免擁擠 */
 @media (max-width: 768px) {
-  .emoji-bg::before {
-    font-size: 3.5rem;
-    letter-spacing: 0.3rem;
-    padding: 1rem;
-  }
+    .emoji-bg::before {
+        font-size: 3.5rem;
+        letter-spacing: 0.3rem;
+        padding: 1rem;
+    }
 }
 
 /* Skip link 基本樣式 */
 .visually-hidden-focusable {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: #0d6efd;
-  color: #fff;
-  padding: 8px 12px;
-  z-index: 1000;
-  border-radius: 0 0 4px 4px;
-  text-decoration: none;
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #0d6efd;
+    color: #fff;
+    padding: 8px 12px;
+    z-index: 1000;
+    border-radius: 0 0 4px 4px;
+    text-decoration: none;
 }
 .visually-hidden-focusable:focus {
-  top: 0;
+    top: 0;
 }
 
 /* 按鈕焦點樣式（符合 WCAG 2.4.7） */
-.btn:focus {
-  outline: 4px solid #0d6efd; /* 明確粗框 */
-  outline-offset: 2px;
-  background-color: #e7f1ff; /* 顏色微變化 */
-  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+.btn-primary:focus {
+    outline: 4px solid #0d6efd;
+    outline-offset: 2px;
+    background-color: #e7f1ff;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
 }
 
 .btn-outline-secondary:focus {
-  outline: 4px solid #0d6efd;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+    outline: 4px solid #0d6efd;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+}
+
+/* --- 深色模式樣式 --- */
+
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* 修正：深色模式下 Emoji 背景的樣式 */
+body.dark-mode .emoji-bg::before {
+    color: #444; /* 將 Emoji 的顏色改為深灰色，在深色背景下依然可見 */
+    opacity: 0.1; /* 調整透明度，讓它不會太搶眼 */
+}
+
+body.dark-mode h1 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .card,
+body.dark-mode .input-group .form-control {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #b0b0b0;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #6a1b9a;
+    border-color: #6a1b9a;
+}
+body.dark-mode .btn-primary:hover {
+    background-color: #5d1689;
+    border-color: #5d1689;
+    color: #e0e0e0;
+}
+
+body.dark-mode .btn-outline-secondary {
+    color: #e0e0e0;
+    border-color: #6c757d;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .dropdown-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #333;
+}
+
+body.dark-mode .text-muted {
+    color: #a0a0a0 !important;
+}
+
+body.dark-mode .highlight-error {
+    background-color: #3b1b1b;
+    border: 2px solid #b23c3c;
+}
+
+body.dark-mode .highlight-error p.status-error {
+    color: #ff9999;
+}
+
+body.dark-mode .status-success {
+    color: #4CAF50;
+}
+
+body.dark-mode .status-warning {
+    color: #FFC107;
+}
+
+body.dark-mode .status-error {
+    color: #F44336;
+}
+
+/* 修正：深色模式下所有按鈕的焦點樣式 */
+body.dark-mode .btn-primary:focus,
+body.dark-mode .btn-outline-secondary:focus {
+    outline: 4px solid rgba(13, 110, 253, 0.5);
+    outline-offset: 2px;
+    background-color: rgba(231, 241, 255, 0.2);
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
 }

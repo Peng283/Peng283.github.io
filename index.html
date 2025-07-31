@@ -1,196 +1,256 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emoji Accessibility Checker</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Emoji Accessibility Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16c-4.467 0-8.096-3.583-8.096-8 0-1.514.463-2.913 1.3-4.044z"/>
+      </symbol>
+    </svg>
 </head>
 <body class="emoji-bg">
 
-  <!-- 快速跳轉至主要輸入區 -->
-  <a href="#userInput" class="visually-hidden-focusable">Skip to input</a>
+    <a href="#userInput" class="visually-hidden-focusable">Skip to input</a>
 
-  <div class="container">
-    <h1 class="text-center mb-4">Emoji Accessibility Checker</h1>
-    <p class="text-center text-muted">Is your text with emoji accessible?</p>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <div class="ms-auto">
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="theme-toggle">
+              <span id="theme-text">Light Mode</span>
+              <svg class="bi ms-2 opacity-50 theme-icon" width="1em" height="1em" fill="currentColor">
+                <use href="#sun-fill"></use>
+              </svg>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme="light">
+                <span>Light Mode</span>
+                <svg class="bi ms-2 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#sun-fill"></use></svg>
+              </button></li>
+              <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme="dark">
+                <span>Dark Mode</span>
+                <svg class="bi ms-2 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#moon-stars-fill"></use></svg>
+              </button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    <div class="input-group mb-4">
-            <input type="text" id="userInput" class="form-control" placeholder="Enter your text with emoji here..." tabindex="0" />
-      <button class="btn btn-primary" onclick="analyzeText()" tabindex="0">Analyze</button>
+    <div class="container">
+      <h1 class="text-center mb-4 mt-5">Emoji Accessibility Checker</h1>
+      <p class="text-center text-muted">Is your text with emoji accessible?</p>
+
+      <div class="input-group mb-4">
+        <input type="text" id="userInput" class="form-control" placeholder="Enter your text with emoji here..." tabindex="0" />
+        <button class="btn btn-primary" onclick="analyzeText()" tabindex="0">Analyze</button>
+      </div>
+
+      <div id="results"></div>
     </div>
 
-    <div id="results"></div>
-  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 主要處理主題切換的 JavaScript
+      document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeText = document.getElementById('theme-text');
+        const themeIcon = themeToggle.querySelector('svg use');
 
-  <script>
-    // 使用 Unicode Extended_Pictographic 屬性來判斷字元是否為 Emoji
-    function isEmoji(char) {
-      return /\p{Extended_Pictographic}/u.test(char);
-    }
-
-    // 偵測連續重複出現的 Emoji，避免過度重複
-    function findRepeatedEmojiOnly(text) {
-      const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
-      const chars = Array.from(segmenter.segment(text), s => s.segment);
-
-      let results = [];
-      let count = 1;
-      let prev = chars[0];
-
-      for (let i = 1; i < chars.length; i++) {
-        if (prev === chars[i] && isEmoji(chars[i])) {
-          count++;
+        // 檢查 localStorage 獲取使用者上次的選擇
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          body.classList.add('dark-mode');
+          themeText.textContent = 'Dark Mode';
+          themeIcon.setAttribute('href', '#moon-stars-fill');
         } else {
-          if (count > 1 && isEmoji(prev)) {
-            results.push({ emoji: prev, count });
-          }
-          count = 1;
+          body.classList.remove('dark-mode');
+          themeText.textContent = 'Light Mode';
+          themeIcon.setAttribute('href', '#sun-fill');
         }
-        prev = chars[i];
-      }
 
-      if (count > 1 && isEmoji(prev)) {
-        results.push({ emoji: prev, count });
-      }
-
-      return results;
-    }
-
-    // 載入 Emoji 支援資料庫，取得詳細資訊（來源：Emojibase）
-    async function loadEmojiSupportData() {
-      const response = await fetch("https://cdn.jsdelivr.net/npm/emojibase-data/en/data.json");
-      return await response.json();
-    }
-
-    // 根據 Emoji 字元，在資料庫中尋找其詳細資訊
-    function findEmojiInfo(emoji, dataset) {
-      return dataset.find(entry => entry.emoji === emoji);
-    }
-
-    // 根據 Unicode 版本回傳不同支援提示文字
-    function getSupportNote(version) {
-      const v = parseFloat(version);
-      if (v <= 6.0) return "Supported on 90%+ devices ✅";
-      if (v <= 12.0) return "Supported on most modern devices ✅";
-      if (v <= 14.0) return "May not appear on older systems ⚠️";
-      return "Limited support on older platforms ⚠️";
-    }
-
-    // 主要分析函式，解析輸入文字並產生多個檢查結果區塊
-    async function analyzeText() {
-      const text = document.getElementById("userInput").value;
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = '';
-
-      // 載入 Emoji 支援資料
-      const dataset = await loadEmojiSupportData();
-      const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
-      const chars = Array.from(segmenter.segment(text), s => s.segment);
-
-      // 建立「螢幕閱讀器輸出」區塊，將 Emoji 替換成文字標籤方便語音朗讀
-      const readerCard = document.createElement("div");
-      readerCard.className = "card result-card p-3";
-      const readerText = chars.map(c => {
-        if (isEmoji(c)) {
-          const info = findEmojiInfo(c, dataset);
-          return `<span>'${info ? info.label : c}'</span>`; // 轉成標籤字串
-        }
-        return `<span>${c}</span>`;
-      }).join('');
-
-      readerCard.innerHTML = `
-        <h5>Screen Reader Output 🔊</h5>
-        <p class="text-muted">Listen to how it sounds with a screen reader.</p>
-        <div class="screen-reader-text" aria-hidden="true">${readerText}</div>
-        <button class="btn btn-outline-secondary mt-2" onclick="playText('${text.replace(/'/g, "\\'")}')" aria-label="Play screen reader simulation" tabindex="0">▶ Play</button>
-      `;
-      resultsDiv.appendChild(readerCard);
-
-
-      // 偵測連續重複的 Emoji，並顯示結果
-      const repeatedList = findRepeatedEmojiOnly(text);
-      const repeatedCard = document.createElement("div");
-      repeatedCard.className = "card result-card p-3";
-      let repeatedStatus = 'No excessive repetition detected ✅';
-      let repeatedClass = 'status-success';
-      if (repeatedList.length > 0) {
-        repeatedStatus = 'Found repeated emoji ❌: ' + repeatedList.map(e => `${e.emoji} (${e.count} times)`).join(', ');
-        repeatedClass = 'status-error';
-        repeatedCard.classList.add('highlight-error');
-      }
-      repeatedCard.innerHTML = `
-        <h5>Repeated Emoji 🔁</h5>
-        <p class="text-muted">Avoid using continuous and repeated emoji.</p>
-        <p class="${repeatedClass}">${repeatedStatus}</p>
-      `;
-      resultsDiv.appendChild(repeatedCard);
-
-      // 檢查內容是否以 Emoji 開頭
-      const startsWithEmoji = /^[\u231A-\uD83E\uDDFF]/.test(text);
-      const positionCard = document.createElement("div");
-      positionCard.className = "card result-card p-3";
-      if (startsWithEmoji) positionCard.classList.add('highlight-error');
-      positionCard.innerHTML = `
-        <h5>Position of Emoji 📍</h5>
-        <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
-        <p class="${startsWithEmoji ? 'status-error' : 'status-success'}">
-          ${startsWithEmoji ? 'Emoji found at the beginning of the sentence ❌' : 'Emoji is well positioned ✅'}
-        </p>
-      `;
-      resultsDiv.appendChild(positionCard);
-
-      // 顯示輸入中所有獨特 Emoji 的支援度與 Unicode 版本資訊
-      const supportedCard = document.createElement("div");
-      supportedCard.className = "card result-card p-3";
-      supportedCard.innerHTML = `
-        <h5>Supported Emoji 📱</h5>
-        <p class="text-muted">Check platform support and Unicode version.</p>
-      `;
-
-      const emojiList = [...new Set(chars.filter(isEmoji))];
-      emojiList.forEach(char => {
-        const info = findEmojiInfo(char, dataset);
-        if (info) {
-          const supportText = getSupportNote(info.version);
-          supportedCard.innerHTML += `
-            <div class="border rounded p-2 mb-2">
-              <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
-              <div class="text-muted">Unicode ${info.version}</div>
-              <div class="text-success">${supportText}</div>
-            </div>
-          `;
-        } else {
-          supportedCard.innerHTML += `
-            <div class="border rounded p-2 mb-2">
-              <div class="fw-bold fs-5 mb-1">${char}</div>
-              <div class="text-warning">Not found in database ⚠️</div>
-            </div>
-          `;
-        }
+        // 監聽下拉式選單的點擊事件
+        document.querySelectorAll('[data-theme]').forEach(button => {
+          button.addEventListener('click', () => {
+            const theme = button.getAttribute('data-theme');
+            if (theme === 'dark') {
+              body.classList.add('dark-mode');
+              localStorage.setItem('theme', 'dark');
+              themeText.textContent = 'Dark Mode';
+              themeIcon.setAttribute('href', '#moon-stars-fill');
+            } else {
+              body.classList.remove('dark-mode');
+              localStorage.setItem('theme', 'light');
+              themeText.textContent = 'Light Mode';
+              themeIcon.setAttribute('href', '#sun-fill');
+            }
+          });
+        });
       });
-      resultsDiv.appendChild(supportedCard);
-    }
 
-    // 使用 Web Speech API 播放輸入文字的語音，並搭配螢幕閱讀器的字元高亮
-    function playText(text) {
-      const utterance = new SpeechSynthesisUtterance();
-      utterance.lang = "en-US";
-      const spans = document.querySelectorAll(".screen-reader-text span");
-      let index = 0;
-      utterance.text = text;
-      utterance.onboundary = (event) => {
-        if (event.name === 'word') {
-          spans.forEach(span => span.classList.remove('active'));
-          if (spans[index]) spans[index].classList.add('active');
-          index++;
+      // 以下是你的原始程式碼
+      // 使用 Unicode Extended_Pictographic 屬性來判斷字元是否為 Emoji
+      function isEmoji(char) {
+        return /\p{Extended_Pictographic}/u.test(char);
+      }
+      // 偵測連續重複出現的 Emoji，避免過度重複
+      function findRepeatedEmojiOnly(text) {
+        const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
+        const chars = Array.from(segmenter.segment(text), s => s.segment);
+        let results = [];
+        let count = 1;
+        let prev = chars[0];
+        for (let i = 1; i < chars.length; i++) {
+          if (prev === chars[i] && isEmoji(chars[i])) {
+            count++;
+          } else {
+            if (count > 1 && isEmoji(prev)) {
+              results.push({ emoji: prev, count });
+            }
+            count = 1;
+          }
+          prev = chars[i];
         }
-      };
-      speechSynthesis.cancel();
-      speechSynthesis.speak(utterance);
-    }
+        if (count > 1 && isEmoji(prev)) {
+          results.push({ emoji: prev, count });
+        }
+        return results;
+      }
+      // 載入 Emoji 支援資料庫，取得詳細資訊（來源：Emojibase）
+      async function loadEmojiSupportData() {
+        const response = await fetch("https://cdn.jsdelivr.net/npm/emojibase-data/en/data.json");
+        return await response.json();
+      }
+      // 根據 Emoji 字元，在資料庫中尋找其詳細資訊
+      function findEmojiInfo(emoji, dataset) {
+        return dataset.find(entry => entry.emoji === emoji);
+      }
+      // 根據 Unicode 版本回傳不同支援提示文字
+      function getSupportNote(version) {
+        const v = parseFloat(version);
+        if (v <= 6.0) return "Supported on 90%+ devices ✅";
+        if (v <= 12.0) return "Supported on most modern devices ✅";
+        if (v <= 14.0) return "May not appear on older systems ⚠️";
+        return "Limited support on older platforms ⚠️";
+      }
+      // 主要分析函式，解析輸入文字並產生多個檢查結果區塊
+      async function analyzeText() {
+        const text = document.getElementById("userInput").value;
+        const resultsDiv = document.getElementById("results");
+        const analyzeButton = document.querySelector('.btn-primary'); // 獲取按鈕元素
+        resultsDiv.innerHTML = '';
+        // 載入 Emoji 支援資料
+        const dataset = await loadEmojiSupportData();
+        const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
+        const chars = Array.from(segmenter.segment(text), s => s.segment);
+        // 建立「螢幕閱讀器輸出」區塊，將 Emoji 替換成文字標籤方便語音朗讀
+        const readerCard = document.createElement("div");
+        readerCard.className = "card result-card p-3";
+        const readerText = chars.map(c => {
+          if (isEmoji(c)) {
+            const info = findEmojiInfo(c, dataset);
+            return `<span>'${info ? info.label : c}'</span>`;
+          }
+          return `<span>${c}</span>`;
+        }).join('');
+        readerCard.innerHTML = `
+          <h5>Screen Reader Output 🔊</h5>
+          <p class="text-muted">Listen to how it sounds with a screen reader.</p>
+          <div class="screen-reader-text" aria-hidden="true">${readerText}</div>
+          <button class="btn btn-primary mt-2" onclick="playText('${text.replace(/'/g, "\\'")}')" aria-label="Play screen reader simulation" tabindex="0">▶ Play</button>
+        `;
+        resultsDiv.appendChild(readerCard);
+        // 偵測連續重複的 Emoji，並顯示結果
+        const repeatedList = findRepeatedEmojiOnly(text);
+        const repeatedCard = document.createElement("div");
+        repeatedCard.className = "card result-card p-3";
+        let repeatedStatus = 'No excessive repetition detected ✅';
+        let repeatedClass = 'status-success';
+        if (repeatedList.length > 0) {
+          repeatedStatus = 'Found repeated emoji ❌: ' + repeatedList.map(e => `${e.emoji} (${e.count} times)`).join(', ');
+          repeatedClass = 'status-error';
+          repeatedCard.classList.add('highlight-error');
+        }
+        repeatedCard.innerHTML = `
+          <h5>Repeated Emoji 🔁</h5>
+          <p class="text-muted">Avoid using continuous and repeated emoji.</p>
+          <p class="${repeatedClass}">${repeatedStatus}</p>
+        `;
+        resultsDiv.appendChild(repeatedCard);
+        // 檢查內容是否以 Emoji 開頭
+        const startsWithEmoji = /^[\u231A-\uD83E\uDDFF]/.test(text);
+        const positionCard = document.createElement("div");
+        positionCard.className = "card result-card p-3";
+        if (startsWithEmoji) positionCard.classList.add('highlight-error');
+        positionCard.innerHTML = `
+          <h5>Position of Emoji 📍</h5>
+          <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
+          <p class="${startsWithEmoji ? 'status-error' : 'status-success'}">
+            ${startsWithEmoji ? 'Emoji found at the beginning of the sentence ❌' : 'Emoji is well positioned ✅'}
+          </p>
+        `;
+        resultsDiv.appendChild(positionCard);
+        // 顯示輸入中所有獨特 Emoji 的支援度與 Unicode 版本資訊
+        const supportedCard = document.createElement("div");
+        supportedCard.className = "card result-card p-3";
+        supportedCard.innerHTML = `
+          <h5>Supported Emoji 📱</h5>
+          <p class="text-muted">Check platform support and Unicode version.</p>
+        `;
+        const emojiList = [...new Set(chars.filter(isEmoji))];
+        emojiList.forEach(char => {
+          const info = findEmojiInfo(char, dataset);
+          if (info) {
+            const supportText = getSupportNote(info.version);
+            supportedCard.innerHTML += `
+              <div class="border rounded p-2 mb-2">
+                <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
+                <div class="text-muted">Unicode ${info.version}</div>
+                <div class="text-success">${supportText}</div>
+              </div>
+            `;
+          } else {
+            supportedCard.innerHTML += `
+              <div class="border rounded p-2 mb-2">
+                <div class="fw-bold fs-5 mb-1">${char}</div>
+                <div class="text-warning">Not found in database ⚠️</div>
+              </div>
+            `;
+          }
+        });
+        resultsDiv.appendChild(supportedCard);
+        // 新增這行：讓按鈕失去焦點
+        if (analyzeButton) {
+          analyzeButton.blur();
+        }
+      }
+      // 使用 Web Speech API 播放輸入文字的語音，並搭配螢幕閱讀器的字元高亮
+      function playText(text) {
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.lang = "en-US";
+        const spans = document.querySelectorAll(".screen-reader-text span");
+        let index = 0;
+        utterance.text = text;
+        utterance.onboundary = (event) => {
+          if (event.name === 'word') {
+            spans.forEach(span => span.classList.remove('active'));
+            if (spans[index]) spans[index].classList.add('active');
+            index++;
+          }
+        };
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+      }
   </script>
 </body>
 </html>
