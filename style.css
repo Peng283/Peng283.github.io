@@ -70,6 +70,11 @@ p.text-muted {
     background-color: #fff6f6;
     transform: scale(1.01);
 }
+.highlight-warning {
+    border: 2px solid #cc7722;
+    background-color: #fff5eb;
+    transform: scale(1.01);
+}
 
 /* 語音高亮 */
 .screen-reader-text span.active {
@@ -244,6 +249,11 @@ body.dark-mode .highlight-error {
 
 body.dark-mode .highlight-error p.status-error {
     color: #ff9999;
+}
+
+body.dark-mode .highlight-warning {
+  background-color: #3b2a1a;  /* 深橘棕色背景 */
+  border: 2px solid #FFC107; /* 金橘色邊框，同你設定的 status-warning */
 }
 
 body.dark-mode .status-success {

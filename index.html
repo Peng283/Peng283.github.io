@@ -137,12 +137,13 @@
       }
       // 根據 Unicode 版本回傳不同支援提示文字
       function getSupportNote(version) {
-        const v = parseFloat(version);
-        if (v <= 6.0) return "Supported on 90%+ devices ✅";
-        if (v <= 12.0) return "Supported on most modern devices ✅";
-        if (v <= 14.0) return "May not appear on older systems ⚠️";
-        return "Limited support on older platforms ⚠️";
-      }
+  const v = parseFloat(version);
+  if (v <= 6.0) return '<span class="status-success">Supported on 90%+ devices ✅</span>';
+  if (v <= 12.0) return '<span class="status-success">Supported on most modern devices ✅</span>';
+  if (v <= 14.0) return '<span class="status-warning">May not appear on older systems ⚠️</span>';
+  return '<span class="status-warning">Limited support on older platforms ⚠️</span>';
+}
+
       // 主要分析函式，解析輸入文字並產生多個檢查結果區塊
       async function analyzeText() {
         const text = document.getElementById("userInput").value;
@@ -212,12 +213,13 @@
           const info = findEmojiInfo(char, dataset);
           if (info) {
             const supportText = getSupportNote(info.version);
+            const hasWarning = supportText.includes("⚠️");
             supportedCard.innerHTML += `
-              <div class="border rounded p-2 mb-2">
-                <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
-                <div class="text-muted">Unicode ${info.version}</div>
-                <div class="text-success">${supportText}</div>
-              </div>
+              <div class="border rounded p-2 mb-2 ${hasWarning ? 'highlight-warning' : ''}">
+              <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
+               <div class="text-muted">Unicode ${info.version}</div>
+               <div>${supportText}</div>
+               </div>
             `;
           } else {
             supportedCard.innerHTML += `
