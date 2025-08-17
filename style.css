@@ -1,4 +1,4 @@
-/* 背景與全站字體：柔和背景＋高可讀性字型 */ 
+
 body {
     background-color: #f8f9f8;
     font-family: 'Inter', sans-serif;
@@ -8,7 +8,7 @@ body {
     line-height: 1.7;
 }
 
-/* 標題：雜誌風封面感 */
+
 h1 {
     font-family: 'Playfair Display', serif;
     font-size: 3rem;
@@ -29,7 +29,7 @@ h1::after {
     opacity: 0.3;
 }
 
-/* 副標：溫和無壓力的介紹段落 */
+/* 副標介紹段落 */
 p.text-muted {
     text-align: left;
     color: #5c636a;
@@ -52,7 +52,7 @@ p.text-muted {
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* 狀態色：色盲友善配色 */
+/* 色盲友善配色 */
 .status-success {
     color: #1e9e75;
     font-weight: 600;
@@ -113,7 +113,7 @@ p.text-muted {
     border: 2px solid #1a1a1a;
 }
 
-/* Emoji 背景圖層，鋪滿且具有透明度 */
+/* 背景圖*/
 .emoji-bg::before {
     content: '😀 😇 🫶 😂 🥹 🤔 ❤️ 🎉 🙈 👀 🙌 🧠 😎 🛟 🔊 👋 😢 🤖 🧑‍🦯 🎯';
     position: fixed;
@@ -138,7 +138,7 @@ p.text-muted {
     padding: 2rem;
 }
 
-/* 響應式調整：在手機上縮小 emoji 字體避免擁擠 */
+/* 響應式調整 */
 @media (max-width: 768px) {
     .emoji-bg::before {
         font-size: 3.5rem;
@@ -184,10 +184,10 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
-/* 修正：深色模式下 Emoji 背景的樣式 */
+/* 背景 */
 body.dark-mode .emoji-bg::before {
-    color: #444; /* 將 Emoji 的顏色改為深灰色，在深色背景下依然可見 */
-    opacity: 0.1; /* 調整透明度，讓它不會太搶眼 */
+    color: #444; 
+    opacity: 0.1; 
 }
 
 body.dark-mode h1 {
@@ -252,8 +252,8 @@ body.dark-mode .highlight-error p.status-error {
 }
 
 body.dark-mode .highlight-warning {
-  background-color: #3b2a1a;  /* 深橘棕色背景 */
-  border: 2px solid #FFC107; /* 金橘色邊框，同你設定的 status-warning */
+  background-color: #3b2a1a;  
+  border: 2px solid #FFC107; 
 }
 
 body.dark-mode .status-success {
@@ -268,7 +268,7 @@ body.dark-mode .status-error {
     color: #F44336;
 }
 
-/* 修正：深色模式下所有按鈕的焦點樣式 */
+
 body.dark-mode .btn-primary:focus,
 body.dark-mode .btn-outline-secondary:focus {
     outline: 4px solid rgba(13, 110, 253, 0.5);
