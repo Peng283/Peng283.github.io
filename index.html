@@ -37,11 +37,11 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme="light">
                         <span>Light Mode</span>
-                        <svg class="bi ms-1 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#sun-fill"></use></svg>
+                        <svg class="bi ms-2 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#sun-fill"></use></svg>
                     </button></li>
                     <li><button class="dropdown-item d-flex align-items-center" type="button" data-theme="dark">
                         <span>Dark Mode</span>
-                        <svg class="bi ms-1 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#moon-stars-fill"></use></svg>
+                        <svg class="bi ms-2 opacity-50" width="1em" height="1em" fill="currentColor"><use href="#moon-stars-fill"></use></svg>
                     </button></li>
                 </ul>
             </div>
@@ -136,12 +136,12 @@
       }
       // Unicode 版本
       function getSupportNote(version) {
-  const v = parseFloat(version);
-  if (v <= 6.0) return '<span class="status-success">Supported on 90%+ devices ✅</span>';
-  if (v <= 12.0) return '<span class="status-success">Supported on most modern devices ✅</span>';
-  if (v <= 14.0) return '<span class="status-warning">May not appear on older systems ⚠️</span>';
-  return '<span class="status-warning">Limited support on older platforms ⚠️</span>';
-}
+        const v = parseFloat(version);
+        if (v <= 6.0) return '<span class="status-success">Supported on 90%+ devices ✅</span>';
+        if (v <= 12.0) return '<span class="status-success">Supported on most modern devices ✅</span>';
+        if (v <= 14.0) return '<span class="status-warning">May not appear on older systems ⚠️</span>';
+        return '<span class="status-warning">Limited support on older platforms ⚠️</span>';
+      }
 
       // 解析輸入文字並產生多個檢查結果區塊
       async function analyzeText() {
@@ -149,11 +149,19 @@
         const resultsDiv = document.getElementById("results");
         const analyzeButton = document.querySelector('.btn-primary'); 
         resultsDiv.innerHTML = '';
+
         // 載入 Emoji 支援資料
         const dataset = await loadEmojiSupportData();
+
+        // 使用 Intl.Segmenter 分割文字
         const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
         const chars = Array.from(segmenter.segment(text), s => s.segment);
-        // 建立「螢幕閱讀器輸出」區塊，將 Emoji 替換成文字
+
+        // 抓出文字中所有 Emoji、去掉重複，判斷是否有 Emoji
+        const emojiList = [...new Set(chars.filter(isEmoji))];
+        const hasEmoji = emojiList.length > 0;
+
+        // Screen Reader Output，將 Emoji 替換成文字
         const readerCard = document.createElement("div");
         readerCard.className = "card result-card p-3";
         const readerText = chars.map(c => {
@@ -170,71 +178,111 @@
           <button class="btn btn-primary mt-2" onclick="playText('${text.replace(/'/g, "\\'")}')" aria-label="Play screen reader simulation" tabindex="0">▶ Play</button>
         `;
         resultsDiv.appendChild(readerCard);
-        // 偵測連續重複的 Emoji，並顯示結果
-        const repeatedList = findRepeatedEmojiOnly(text);
+
+        // Repeated Emoji
         const repeatedCard = document.createElement("div");
         repeatedCard.className = "card result-card p-3";
-        let repeatedStatus = 'No excessive repetition detected ✅';
-        let repeatedClass = 'status-success';
-        if (repeatedList.length > 0) {
-          repeatedStatus = 'Found repeated emoji ❌: ' + repeatedList.map(e => `${e.emoji} (${e.count} times)`).join(', ');
-          repeatedClass = 'status-error';
-          repeatedCard.classList.add('highlight-error');
+        if (!hasEmoji) {
+          // 如果沒有任何 emoji
+          repeatedCard.innerHTML = `
+            <h5>Repeated Emoji 🔁</h5>
+            <p class="text-muted">Avoid using continuous and repeated emoji.</p>
+            <div class="border rounded p-2 mb-2 highlight-warning">
+              <div class="fw-bold fs-5 mb-1 status-warning">No emojis detected ⚠️</div>
+              <div class="text-muted">This section only applies when emojis are present.</div>
+            </div>
+          `;
+        } else {
+          const repeatedList = findRepeatedEmojiOnly(text);
+          let repeatedStatus = 'No excessive repetition detected ✅';
+          let repeatedClass = 'status-success';
+          if (repeatedList.length > 0) {
+            repeatedStatus = 'Found repeated emoji ❌: ' + repeatedList.map(e => `${e.emoji} (${e.count} times)`).join(', ');
+            repeatedClass = 'status-error';
+            repeatedCard.classList.add('highlight-error');
+          }
+          repeatedCard.innerHTML = `
+            <h5>Repeated Emoji 🔁</h5>
+            <p class="text-muted">Avoid using continuous and repeated emoji.</p>
+            <p class="${repeatedClass}">${repeatedStatus}</p>
+          `;
         }
-        repeatedCard.innerHTML = `
-          <h5>Repeated Emoji 🔁</h5>
-          <p class="text-muted">Avoid using continuous and repeated emoji.</p>
-          <p class="${repeatedClass}">${repeatedStatus}</p>
-        `;
         resultsDiv.appendChild(repeatedCard);
-        // 檢查內容是否以 Emoji 開頭
-        const startsWithEmoji = /^[\u231A-\uD83E\uDDFF]/.test(text);
+
+        // Position of Emoji
         const positionCard = document.createElement("div");
         positionCard.className = "card result-card p-3";
-        if (startsWithEmoji) positionCard.classList.add('highlight-error');
-        positionCard.innerHTML = `
-          <h5>Position of Emoji 📍</h5>
-          <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
-          <p class="${startsWithEmoji ? 'status-error' : 'status-success'}">
-            ${startsWithEmoji ? 'Emoji found at the beginning of the sentence ❌' : 'Emoji is well positioned ✅'}
-          </p>
-        `;
+        if (!hasEmoji) {
+          positionCard.innerHTML = `
+            <h5>Position of Emoji 📍</h5>
+            <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
+            <div class="border rounded p-2 mb-2 highlight-warning">
+              <div class="fw-bold fs-5 mb-1 status-warning">No emojis detected ⚠️</div>
+              <div class="text-muted">This section only applies when emojis are present.</div>
+            </div>
+          `;
+        } else {
+          const startsWithEmoji = isEmoji(chars[0]);
+          if (startsWithEmoji) positionCard.classList.add('highlight-error');
+          positionCard.innerHTML = `
+            <h5>Position of Emoji 📍</h5>
+            <p class="text-muted">Ensure emojis are not at the beginning of the content.</p>
+            <p class="${startsWithEmoji ? 'status-error' : 'status-success'}">
+              ${startsWithEmoji ? 'Emoji found at the beginning of the sentence ❌' : 'Emoji is well positioned ✅'}
+            </p>
+          `;
+        }
         resultsDiv.appendChild(positionCard);
-        // 顯示輸入中Emoji 的支援度與 Unicode 版本
+
+        // Supported Emoji
         const supportedCard = document.createElement("div");
         supportedCard.className = "card result-card p-3";
         supportedCard.innerHTML = `
           <h5>Supported Emoji 📱</h5>
           <p class="text-muted">Check platform support and Unicode version.</p>
+          <div id="supportedContent"></div>  
         `;
-        const emojiList = [...new Set(chars.filter(isEmoji))];
-        emojiList.forEach(char => {
-          const info = findEmojiInfo(char, dataset);
-          if (info) {
-            const supportText = getSupportNote(info.version);
-            const hasWarning = supportText.includes("⚠️");
-            supportedCard.innerHTML += `
-              <div class="border rounded p-2 mb-2 ${hasWarning ? 'highlight-warning' : ''}">
-              <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
-               <div class="text-muted">Unicode ${info.version}</div>
-               <div>${supportText}</div>
-               </div>
-            `;
-          } else {
-            supportedCard.innerHTML += `
-              <div class="border rounded p-2 mb-2">
-                <div class="fw-bold fs-5 mb-1">${char}</div>
-                <div class="text-warning">Not found in database ⚠️</div>
-              </div>
-            `;
-          }
-        });
+        const supportedContent = supportedCard.querySelector("#supportedContent");
+
+        if (!hasEmoji) {
+          supportedContent.innerHTML = `
+            <div class="border rounded p-2 mb-2 highlight-warning">
+              <div class="fw-bold fs-5 mb-1 status-warning">No emojis detected ⚠️</div>
+              <div class="text-muted">This section only applies when emojis are present.</div>
+            </div>
+          `;
+        } else {
+          supportedContent.innerHTML = "";
+          emojiList.forEach(char => {
+            const info = findEmojiInfo(char, dataset);
+            if (info) {
+              const supportText = getSupportNote(info.version);
+              const hasWarning = supportText.includes("⚠️");
+              supportedContent.innerHTML += `
+                <div class="border rounded p-2 mb-2 ${hasWarning ? 'highlight-warning' : ''}">
+                  <div class="fw-bold fs-5 mb-1">${char} ${info.label}</div>
+                  <div class="text-muted">Unicode ${info.version}</div>
+                  <div>${supportText}</div>
+                </div>
+              `;
+            } else {
+              supportedContent.innerHTML += `
+                <div class="border rounded p-2 mb-2 highlight-warning">
+                  <div class="fw-bold fs-5 mb-1">${char}</div>
+                  <div class="text-muted">Not found in database ⚠️</div>
+                </div>
+              `;
+            }
+          });
+        }
         resultsDiv.appendChild(supportedCard);
+
         // 讓按鈕失去焦點
         if (analyzeButton) {
           analyzeButton.blur();
         }
       }
+
       // 使用 Web Speech API 播放
       function playText(text) {
         const utterance = new SpeechSynthesisUtterance();
